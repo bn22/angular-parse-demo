@@ -8,11 +8,30 @@
 
 
 angular.module('GitHubApp', [])
-    .controller('GitHubController', function($scope) {
-        $scope.userName = 'drstearns';
-        $scope.getRepos = function() {
+    .controller('GitHubController', function($scope, $http) {
+        $scope.userName = 'bn22';
+        $scope.getRepos = function () {
 
             //add code here
+            $scope.loading = true;
+            $http.get('https://api.github.com/users/' + $scope.userName + '/repos')
+                .success(function (data) {
+                    $scope.repos = data;
+                    $scope.errorMessage = null;
+                })
+                .error(function(err) {
+                    //alert(err.message)
+                    $scope.errorMessage = err.message;
+                })
+                .finally(function() {
+                    $scope.loading = false;
+                });
 
-        };
-    });
+    };
+});
+
+
+
+
+//http://www.ajaxload.info/
+//https://parse.com
